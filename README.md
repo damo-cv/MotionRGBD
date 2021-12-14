@@ -33,11 +33,11 @@ data prepare: Database with the following folder structure:
 ```
 ## 2. Methodology
 <p align="center">
-  <img width="400" height="200" src="demo/pipline.jpg">
+  <img width="600" height="300" src="demo/pipline.jpg">
   <img width="800" height="200" src="demo/decouple_recouple.jpg">
 </p>
- We propose to decouple and recouple spatiotemporal representation for RGB-D-based motion recognition. Figure left illustrates the proposed multi-modal spatiotemporal representation learning framework. The RGB-D-based motion recognition can be described as spatiotemporal information decoupling modeling, compact representation recoupling learning, and cross-modal representation interactive learning. 
- Figure right shows the process of decoupling and recoupling saptiotemporal representation of a unimodal data.
+ We propose to decouple and recouple spatiotemporal representation for RGB-D-based motion recognition. The Figure in the first line illustrates the proposed multi-modal spatiotemporal representation learning framework. The RGB-D-based motion recognition can be described as spatiotemporal information decoupling modeling, compact representation recoupling learning, and cross-modal representation interactive learning. 
+The Figure in the second line shows the process of decoupling and recoupling saptiotemporal representation of a unimodal data.
 
 ## 3. Train and Evaluate
 All of our models are pre-trained on the [20BN Jester V1 dataset](https://www.kaggle.com/toxicmender/20bn-jester) and the pretrained model can be download [here](https://drive.google.com/drive/folders/1eBXED3uXlzBZzix7TvtDlJrZ3SlDCSF6?usp=sharing). Before cross-modal representation interactive learning, we first separately perform unimodal representation learning on RGB and depth data modalities. 
