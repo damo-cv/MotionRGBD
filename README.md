@@ -120,23 +120,108 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --nproc_per_node
 ```
 
 ## 4. Models Download
-| Dataset    |  Modality | Acc| Download | 
-| :---     |   :---:    |  :---: |  :---:  |  :---:  |
-| NvGesture  |    RGB     |  89.58  | [here](https://drive.google.com/drive/folders/1jLAoMFkJ8-z3lyF0-mTvCuY8QchhiNOA?usp=sharing) |
-| NvGesture  |    Depth     |  90.62  | [here](https://drive.google.com/drive/folders/1jLAoMFkJ8-z3lyF0-mTvCuY8QchhiNOA?usp=sharing) |
-| NvGesture  |    RGB-D     |  91.70  | [here](https://drive.google.com/drive/folders/1jLAoMFkJ8-z3lyF0-mTvCuY8QchhiNOA?usp=sharing) |
-| THU-READ(CS2)  |    RGB     |  81.67  | [here](https://drive.google.com/drive/folders/1_oihwEN-AhhTvkmoTb5If6d1Hdf9Z5JC?usp=sharing) |
-| THU-READ(CS2)  |    Depth     |  81.03  | [here](https://drive.google.com/drive/folders/1_oihwEN-AhhTvkmoTb5If6d1Hdf9Z5JC?usp=sharing) |
-| THU-READ(CS2)  |    RGB-D     |  90.00  | [here](https://drive.google.com/drive/folders/1_oihwEN-AhhTvkmoTb5If6d1Hdf9Z5JC?usp=sharing) |
-| NTU-RGBD(CS)  |    RGB     |  90.3  | [here](https://drive.google.com/drive/folders/1iMFsZA7X-8rIkafTIZT5Z0aEFvhT4pq6?usp=sharing) |
-| NTU-RGBD(CS)  |    Depth     |  92.7  | [here](https://drive.google.com/drive/folders/1iMFsZA7X-8rIkafTIZT5Z0aEFvhT4pq6?usp=sharing) |
-| NTU-RGBD(CS)  |    RGB-D     |  94.2  | [here](https://drive.google.com/drive/folders/1iMFsZA7X-8rIkafTIZT5Z0aEFvhT4pq6?usp=sharing) |
-| NTU-RGBD(CV)  |    RGB     |  95.4  | [here](https://drive.google.com/drive/folders/1iMFsZA7X-8rIkafTIZT5Z0aEFvhT4pq6?usp=sharing) |
-| NTU-RGBD(CV)  |    Depth     |  96.2  | [here](https://drive.google.com/drive/folders/1iMFsZA7X-8rIkafTIZT5Z0aEFvhT4pq6?usp=sharing) |
-| NTU-RGBD(CV)  |    RGB-D     |  97.3  | [here](https://drive.google.com/drive/folders/1iMFsZA7X-8rIkafTIZT5Z0aEFvhT4pq6?usp=sharing) |
-| IsoGD  |    RGB     |  60.87  | [here](https://drive.google.com/drive/folders/1oBSzhslRy34jqA-VsPFIYYCJfN8GdqED?usp=sharing) |
-| IsoGD  |    Depth     |  60.17  | [here](https://drive.google.com/drive/folders/1oBSzhslRy34jqA-VsPFIYYCJfN8GdqED?usp=sharing) |
-| IsoGD  |    RGB-D     |  66.78  | [here](https://drive.google.com/drive/folders/1oBSzhslRy34jqA-VsPFIYYCJfN8GdqED?usp=sharing) |
+<table>
+  <tr>
+    <th>Dataset</th>
+    <th>Modality</th>
+    <th>Accuracy</th>
+    <th>Download</th>
+  </tr>
+  <tr>
+    <td>NvGesture</td>
+    <td>RGB</td>
+    <td>89.58</td>
+    <td><a href="https://drive.google.com/drive/folders/1jLAoMFkJ8-z3lyF0-mTvCuY8QchhiNOA?usp=sharing">Google Drive</a></td>
+  </tr>
+  <tr>
+    <td>NvGesture</td>
+    <td>Depth</td>
+    <td>90.62</td>
+    <td><a href="https://drive.google.com/drive/folders/1jLAoMFkJ8-z3lyF0-mTvCuY8QchhiNOA?usp=sharing">Google Drive</a></td>
+  </tr>
+  <tr>
+    <td>NvGesture</td>
+    <td>RGB-D</td>
+    <td>91.70</td>
+    <td><a href="https://drive.google.com/drive/folders/1jLAoMFkJ8-z3lyF0-mTvCuY8QchhiNOA?usp=sharing">Google Drive</a></td>
+  </tr>
+  
+  <tr>
+    <td>THU-READ</td>
+    <td>RGB</td>
+    <td>81.25</td>
+    <td><a href="https://drive.google.com/drive/folders/1_oihwEN-AhhTvkmoTb5If6d1Hdf9Z5JC?usp=sharing">Google Drive</a></td>
+  </tr>
+  <tr>
+    <td>THU-READ</td>
+    <td>Depth</td>
+    <td>77.92</td>
+    <td><a href="https://drive.google.com/drive/folders/1_oihwEN-AhhTvkmoTb5If6d1Hdf9Z5JC?usp=sharing">Google Drive</a></td>
+  </tr>
+  <tr>
+    <td>THU-READ</td>
+    <td>RGB-D</td>
+    <td>87.04</td>
+    <td><a href="https://drive.google.com/drive/folders/1_oihwEN-AhhTvkmoTb5If6d1Hdf9Z5JC?usp=sharing">Google Drive</a></td>
+  </tr>
+  
+   <tr>
+    <td>NTU-RGBD(CS)</td>
+    <td>RGB</td>
+    <td>90.3</td>
+    <td><a href="https://drive.google.com/drive/folders/1iMFsZA7X-8rIkafTIZT5Z0aEFvhT4pq6?usp=sharing">Google Drive</a></td>
+  </tr>
+    <tr>
+    <td>NTU-RGBD(CS)</td>
+    <td>Depth</td>
+    <td>92.7</td>
+    <td><a href="https://drive.google.com/drive/folders/1iMFsZA7X-8rIkafTIZT5Z0aEFvhT4pq6?usp=sharing">Google Drive</a></td>
+  </tr>
+  <tr>
+    <td>NTU-RGBD(CS)</td>
+    <td>RGB-D</td>
+    <td>94.2</td>
+    <td><a href="https://drive.google.com/drive/folders/1iMFsZA7X-8rIkafTIZT5Z0aEFvhT4pq6?usp=sharing">Google Drive</a></td>
+  </tr>
+  
+  <tr>
+    <td>NTU-RGBD(CV)</td>
+    <td>RGB</td>
+    <td>95.4</td>
+    <td><a href="https://drive.google.com/drive/folders/1iMFsZA7X-8rIkafTIZT5Z0aEFvhT4pq6?usp=sharing">Google Drive</a></td>
+  </tr>
+    <tr>
+    <td>NTU-RGBD(CV)</td>
+    <td>Depth</td>
+    <td>96.2</td>
+    <td><a href="https://drive.google.com/drive/folders/1iMFsZA7X-8rIkafTIZT5Z0aEFvhT4pq6?usp=sharing">Google Drive</a></td>
+  </tr>
+    <tr>
+    <td>NTU-RGBD(CV)</td>
+    <td>RGB-D</td>
+    <td>97.3</td>
+    <td><a href="https://drive.google.com/drive/folders/1iMFsZA7X-8rIkafTIZT5Z0aEFvhT4pq6?usp=sharing">Google Drive</a></td>
+  </tr>
+  
+  <tr>
+    <td>IsoGD</td>
+    <td>RGB</td>
+    <td>60.87</td>
+    <td><a href="https://drive.google.com/drive/folders/1oBSzhslRy34jqA-VsPFIYYCJfN8GdqED?usp=sharing">Google Drive</a></td>
+  </tr>
+  <tr>
+    <td>IsoGD</td>
+    <td>Depth</td>
+    <td>60.17</td>
+    <td><a href="https://drive.google.com/drive/folders/1oBSzhslRy34jqA-VsPFIYYCJfN8GdqED?usp=sharing">Google Drive</a></td>
+  </tr>
+  <tr>
+    <td>IsoGD</td>
+    <td>RGB-D</td>
+    <td>66.79</td>
+    <td><a href="https://drive.google.com/drive/folders/1oBSzhslRy34jqA-VsPFIYYCJfN8GdqED?usp=sharing">Google Drive</a></td>
+  </tr>
+</table>
 
 # Citation
 ```
