@@ -1,0 +1,72 @@
+# '''
+# Copyright (C) 2010-2021 Alibaba Group Holding Limited.
+# '''
+
+common:
+  data: /path/to/NTU-RGBD/dataset/
+  splits: /path/to/NTU-RGBD/dataset/dataset_splits/@CS
+
+  #-------basic Hyparameter----------
+  visdom:
+    enable: False
+    visname: NTU
+  dataset: NTU #Database name e.g., NTU, THU ...
+  batch_size: 4
+  test_batch_size: 4
+  num_workers: 6
+  learning_rate: 0.005
+  learning_rate_min: 0.00001
+  momentum: 0.9
+  weight_decay: 0.0003
+  init_epochs: 0
+  epochs: 100
+  report_freq: 100
+  optim: SGD
+  dist: True
+  vis_feature: True # Visualization?
+
+  scheduler:
+    name: cosin
+    patience: 4
+    warm_up_epochs: 3
+  loss:
+    name: CE
+    labelsmooth: True
+  MultiLoss: True
+  loss_lamdb: [ 1, 0.5, 0.5, 0.5 ]
+  distill: 1.
+
+model:
+  Network: I3DWTrans # e.g., I3DWTrans or FusionNet
+  pretrained: ''
+  resume: '' 
+  resumelr: ''
+  sample_duration: 64
+  sample_size: 224
+  grad_clip: 5.
+  SYNC_BN: 1
+  w: 10
+  temper: 0.5
+  recoupling: True
+  knn_attention: 0.7
+  sharpness: True
+  temp: [ 0.04, 0.07 ]
+  frp: True
+  SEHeads: 1
+  N: 6 # Number of Transformer Blocks
+
+  #-------Used for fusion network----------
+  rgb_checkpoint: ''
+  depth_checkpoint: ''
+
+dataset:
+  type: M # M: rgb, K: depth
+  flip: 0.5
+  rotated: 0.5
+  angle: (-10, 10) # Rotation angle
+  Blur: False
+  resize: (320, 240)
+  crop_size: 224
+  low_frames: 16
+  media_frames: 32
+  high_frames: 48

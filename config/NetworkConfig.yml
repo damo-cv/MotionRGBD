@@ -1,0 +1,69 @@
+common:
+  data: /path/to/dataset/NTU-RGBD
+  splits: /path/to/dataset/dataset/NTU-RGBD/dataset_splits/@CS # include: train.txt and test.txt
+
+  #-------basic Hyparameter----------
+  visdom:
+    enable: True
+    visname: NTU
+  dataset: NTU #Database name e.g., NTU, THUREAD, NvGesture and IsoGD ...
+  batch_size: 6
+  test_batch_size: 6
+  num_workers: 6
+  learning_rate: 0.01
+  learning_rate_min: 0.00001
+  momentum: 0.9
+  weight_decay: 0.0003
+  init_epochs: 0
+  epochs: 100 # if training on IsoGD dataset, set 300 is better.
+  report_freq: 100
+  optim: SGD
+  dist: True
+  vis_feature: True # Visualization?
+
+  scheduler:
+    name: cosin
+    patience: 4
+    warm_up_epochs: 3
+  loss:
+    name: CE
+    labelsmooth: True
+  MultiLoss: True
+  loss_lamdb: [ 1, 0.5, 0.5, 0.5 ]
+  distill: 1.
+
+model:
+  Network: I3DWTrans # e.g., I3DWTrans or FusionNet
+  pretrained: '' # all of experiments are pre-trained on 20BN Jester V1 dataset except for NTU-RGBD.
+  resume: ''
+  resumelr: False
+  sample_duration: 64
+  sample_size: 224
+  grad_clip: 5.
+  SYNC_BN: 1
+  w: 10
+  temper: 0.5 # 0.5 for THUREAD and NTU-RGBD; 0.4 for NvGesture and IsoGD
+  recoupling: True
+  knn_attention: 0.7
+  sharpness: True
+  temp: [ 0.04, 0.07 ]
+  frp: True
+  SEHeads: 1
+  N: 6 # Number of Transformer Blocks
+
+  #-------Used for fusion network----------
+  rgb_checkpoint: ''
+  depth_checkpoint: ''
+
+dataset:
+  type: M # M: rgb, K: depth
+  flip: 0.5 # set 0.0 for NvGesture and IsoGD
+  rotated: 0.5 # THUREAD: 0.8, others: 0.5
+  angle: (-10, 10) # Rotation angle. THUREAD: (-45, 45), others: (-10, 10)
+  Blur: False
+  resize: (320, 240) #NTU and THUREAD: (320, 240), others:(256, 256)
+  crop_size: 224 # THUREAD: 200, others: 224
+  low_frames: 16
+  media_frames: 32
+  high_frames: 48
+
