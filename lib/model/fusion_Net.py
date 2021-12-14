@@ -122,29 +122,26 @@ class CrossFusionNet(nn.Module):
 
         assert args.rgb_checkpoint and args.depth_checkpoint
         self.Modalit_rgb = DSNNet(args, num_classes=num_classes,
-                                     pretrained=args.rgb_checkpoint + '/model_best.pth.tar')
+                                     pretrained=args.rgb_checkpoint)
 
         self.Modalit_depth = DSNNet(args, num_classes=num_classes,
-                                       pretrained=args.depth_checkpoint + '/model_best.pth.tar')
+                                       pretrained=args.depth_checkpoint)
 
         if self.spatial_interact:
             self.crossFusion = nn.Sequential(
-                nn.LayerNorm(512 * 2),
-                nn.Linear(512 * 2, 512, bias=False),
-                nn.Linear(512, 256, bias=False),
+                nn.Conv2d(512 * 2, 512, kernel_size=1, stride=1, padding=0, bias=False),
+                nn.BatchNorm2d(512),
                 nn.ReLU(),
-                nn.Linear(256, 512, bias=False),
-                nn.LayerNorm(512),
+                nn.Conv2d(512, 512, kernel_size=1, stride=1, padding=0, bias=False),
                 nn.Dropout(0.4)
+                
             )
         if self.temporal_interact:
             self.crossFusionT = nn.Sequential(
-                nn.LayerNorm(512 * 2),
-                nn.Linear(512 * 2, 512, bias=False),
-                nn.Linear(512, 256, bias=False),
+                nn.Conv2d(512 * 2, 512, kernel_size=1, stride=1, padding=0, bias=False),
+                nn.BatchNorm2d(512),
                 nn.ReLU(),
-                nn.Linear(256, 512, bias=False),
-                nn.LayerNorm(512),
+                nn.Conv2d(512, 512, kernel_size=1, stride=1, padding=0, bias=False),
                 nn.Dropout(0.4)
             )
 
@@ -169,17 +166,19 @@ class CrossFusionNet(nn.Module):
         spatial_K = self.Modalit_depth(depth, depth_garr, endpoint='spatial')
 
         if self.spatial_interact:
-            spatial_fusion_features = self.crossFusion(torch.cat((spatial_M, spatial_K), dim=-1))
+            b, t, c = spatial_M.shape
+            spatial_fusion_features = self.crossFusion(F.normalize(torch.cat((spatial_M, spatial_K), dim=-1), p = 2, dim=-1).view(b, c*2, t, 1)).squeeze()
 
-        (temporal_M, M_xs, M_xm, M_xl), distillationM, _ = self.Modalit_rgb(x=spatial_M + spatial_fusion_features if self.spatial_interact else spatial_M,
+        (temporal_M, M_xs, M_xm, M_xl), distillationM, _ = self.Modalit_rgb(x=spatial_M + spatial_fusion_features.view(spatial_M.shape) if self.spatial_interact else spatial_M,
                                                                          endpoint='temporal')  # size[4, 512]
-        (temporal_K, K_xs, K_xm, K_xl), distillationK, _ = self.Modalit_depth(x=spatial_K + spatial_fusion_features if self.spatial_interact else spatial_K,
+        (temporal_K, K_xs, K_xm, K_xl), distillationK, _ = self.Modalit_depth(x=spatial_K + spatial_fusion_features.view(spatial_M.shape) if self.spatial_interact else spatial_K,
                                                                            endpoint='temporal')
         logit_r = self.classifier1(temporal_M)
         logit_d = self.classifier2(temporal_K)
 
         if self.temporal_interact:
-            temporal_fusion_features = self.crossFusionT(torch.cat((temporal_M, temporal_K), dim=-1))
+            b, c = temporal_M.shape
+            temporal_fusion_features = self.crossFusionT(F.normalize(torch.cat((temporal_M, temporal_K), dim=-1), p = 2, dim=-1).view(b, c*2, 1, 1)).squeeze()
             temporal_M, temporal_K = temporal_M+temporal_fusion_features, temporal_K+temporal_fusion_features
 
         en_x, de_x = self.fusion_model(temporal_M, temporal_K)
