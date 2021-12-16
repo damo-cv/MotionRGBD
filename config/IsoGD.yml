@@ -16,7 +16,7 @@ common:
   momentum: 0.9
   weight_decay: 0.0003
   init_epochs: 0
-  epochs: 100
+  epochs: 300
   report_freq: 10
   optim: SGD
   dist: True
