@@ -31,7 +31,7 @@ data prepare: Database with the following folder structure:
 │  │   │   ├──MDepth-00000001.png
 │  │   │   ├──......
 ```
-It is important to note that due to the RGB video resolution  in the NTU dataset is relatively high, so we are not directly to resize the image from the original resolution to 320x240, but first irst crop the object-centered ROI area (640x480), and then resize it to  320x240 for training and testing.
+It is important to note that due to the RGB video resolution  in the NTU dataset is relatively high, so we are not directly to resize the image from the original resolution to 320x240, but first crop the object-centered ROI area (640x480), and then resize it to 320x240 for training and testing.
 
 ## 2. Methodology
 <p align="center">
