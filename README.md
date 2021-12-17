@@ -1,4 +1,4 @@
-# Decoupling and Recoupling Spatiotemporal Representation for RGB-D-based Motion Recognition, [arxiv](https://arxiv.org/***)
+# Decoupling and Recoupling Spatiotemporal Representation for RGB-D-based Motion Recognition, [arxiv](https://arxiv.org/abs/2112.09129)
 
 This is a PyTorch implementation of our paper. 
 ## 1. Requirements
@@ -228,6 +228,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --nproc_per_node
 @inproceedings{zhou2021DRSR,
       title={Decoupling and Recoupling Spatiotemporal Representation for RGB-D-based Motion Recognition}, 
       author={Benjia Zhou and Pichao Wang and Jun Wan and Yanyan Liang and Fan Wang and Du Zhang and Zhen Lei and Hao Li and Rong Jin},
+      journal={arXiv preprint arXiv:2112.09129},
       year={2021},
 }
 ```
