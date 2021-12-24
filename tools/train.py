@@ -165,7 +165,7 @@ def main(local_rank, nprocs, args):
         valid_acc, valid_obj, valid_dict, meter_dict_val, output = infer(valid_queue, model, criterion, local_rank, epoch)
 
         # scheduler_func.step(scheduler, valid_acc)
-        if epoch >= args.scheduler['warm_up_epochs']-1:
+        if epoch >= args.scheduler['warm_up_epochs']:
             if args.resume and args.resumelr:
                 for g in optimizer.param_groups:
                     g['lr'] = resume_scheduler[0]
