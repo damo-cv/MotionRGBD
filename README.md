@@ -1,4 +1,4 @@
-# Decoupling and Recoupling Spatiotemporal Representation for RGB-D-based Motion Recognition, [arxiv](https://arxiv.org/abs/2112.09129)
+# [CVPR2022] Decoupling and Recoupling Spatiotemporal Representation for RGB-D-based Motion Recognition, [arxiv](https://arxiv.org/abs/2112.09129)
 
 This is a PyTorch implementation of our paper. 
 ## 1. Requirements
