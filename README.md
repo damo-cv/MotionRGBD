@@ -227,11 +227,13 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.launch --nproc_per_node
 
 # Citation
 ```
-@inproceedings{zhou2021DRSR,
-      title={Decoupling and Recoupling Spatiotemporal Representation for RGB-D-based Motion Recognition}, 
-      author={Benjia Zhou and Pichao Wang and Jun Wan and Yanyan Liang and Fan Wang and Du Zhang and Zhen Lei and Hao Li and Rong Jin},
-      journal={arXiv preprint arXiv:2112.09129},
-      year={2021},
+@InProceedings{Zhou_2022_CVPR,
+    author    = {Zhou, Benjia and Wang, Pichao and Wan, Jun and Liang, Yanyan and Wang, Fan and Zhang, Du and Lei, Zhen and Li, Hao and Jin, Rong},
+    title     = {Decoupling and Recoupling Spatiotemporal Representation for RGB-D-Based Motion Recognition},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    month     = {June},
+    year      = {2022},
+    pages     = {20154-20163}
 }
 ```
 # LICENSE
