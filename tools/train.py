@@ -49,6 +49,8 @@ parser.add_argument('--save_output', action='store_true', help='Save logits?')
 parser.add_argument('--demo_dir', type=str, default='./demo', help='The dir for save all the demo')
 parser.add_argument('--resume', type=str, default='', help='resume model path.')
 
+parser.add_argument('--distill-lamdb', type=float, default=0.0, help='initial distillation loss weight')
+
 parser.add_argument('--drop_path_prob', type=float, default=0.5, help='drop path probability')
 parser.add_argument('--save', type=str, default='Checkpoints/', help='experiment dir')
 parser.add_argument('--seed', type=int, default=123, help='random seed')
@@ -156,7 +158,6 @@ def main(local_rank, nprocs, args):
         model.drop_path_prob = args.drop_path_prob * epoch / args.epochs
 
         if epoch < args.scheduler['warm_up_epochs']-1:
-            args.distill_lamdb = 0.
             for g in optimizer.param_groups:
                 g['lr'] = scheduler[-1](epoch)
         else:
@@ -269,7 +270,7 @@ def Visfeature(inputs, feature, v_path=None):
     cv2.imwrite(os.path.join(args.save, 'CAM-Features.png'), superimposed_imgs.numpy())
 
     if args.eval_only:
-        MHAS_s, MHAS_m, MHAS_l = feature[2]
+        MHAS_s, MHAS_m, MHAS_l = feature[4]
         MHAS_s, MHAS_m, MHAS_l = MHAS_s.detach().cpu(), MHAS_m.detach().cpu(), MHAS_l.detach().cpu()
         # Normalize
         att_max, index_max = torch.max(MHAS_s.view(MHAS_s.size(0), -1), dim=-1)
