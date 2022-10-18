@@ -9,8 +9,6 @@ import random, os
 from PIL import Image
 import numpy as np
 import logging
-import accimage
-set_image_backend('accimage')
 np.random.seed(123)
 
 class JesterData(Datasets):
