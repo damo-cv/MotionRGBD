@@ -22,6 +22,7 @@ import torchvision.datasets as dset
 import torch.backends.cudnn as cudnn
 import torch.distributed as dist
 
+# import flops_benchmark
 from utils.visualizer import Visualizer
 from config import Config
 from lib import *
@@ -58,8 +59,8 @@ try:
     if args.resume:
         args.save = os.path.split(args.resume)[0]
     else:
-        args.save = '{}/{}-EXP-{}'.format(args.save, args.Network, time.strftime("%Y%m%d-%H%M%S"))
-    utils.create_exp_dir(args.save, scripts_to_save=[args.config] + glob.glob('./tools/*.py'))
+        args.save = '{}/{}-{}-{}-{}'.format(args.save, args.Network, args.dataset, args.type, time.strftime("%Y%m%d-%H%M%S"))
+    utils.create_exp_dir(args.save, scripts_to_save=[args.config] + glob.glob('./tools/*.py') + glob.glob('./lib/*'))
 except:
     pass
 log_format = '%(asctime)s %(message)s'
@@ -134,6 +135,7 @@ def main(local_rank, nprocs, args):
     model = nn.parallel.DistributedDataParallel(model, device_ids=[local_rank], find_unused_parameters=True)
     if local_rank == 0:
         logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
+        # logging.info('FLOPs: {}'.format(flops_benchmark.count_flops(model)))
 
     train_results = dict(
         train_score=[],
@@ -285,7 +287,8 @@ def Visfeature(inputs, feature, v_path=None):
         mhas_s = make_grid(MHAS_s.unsqueeze(1), nrow=int(MHAS_s.size(0) ** 0.5), padding=2)[0]
         mhas_m = make_grid(MHAS_m.unsqueeze(1), nrow=int(MHAS_m.size(0) ** 0.5), padding=2)[0]
         mhas_l = make_grid(MHAS_l.unsqueeze(1), nrow=int(MHAS_l.size(0) ** 0.5), padding=2)[0]
-        vis.featuremap('MHAS Map', mhas_l)
+        if args.visdom['enable']:
+            vis.featuremap('MHAS Map', mhas_l)
 
         fig = plt.figure(figsize=(20, 10))
         ax = fig.add_subplot(131)
@@ -465,6 +468,7 @@ def infer(valid_queue, model, criterion, local_rank, epoch):
     grounds_gather, preds_gather = list(map(lambda x: x.cpu().numpy(), [grounds_gather, preds_gather]))
 
     if local_rank == 0:
+        # v_paths = np.array(v_paths)[random.sample(list(wrong), 10)]
         v_paths = np.array(v_paths)
         grounds = np.array(grounds)
         preds = np.array(preds)
@@ -482,17 +486,14 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         torch.cuda.empty_cache()
         if os.path.exists(args.save) and len(os.listdir(args.save)) < 3:
-            print('remove ‘{}’: Directory'.format(args.save))
-            if os.path.exists(args.save):
-                shutil.rmtree(args.save)
+            print('remove {}: Directory'.format(args.save))
+            os.system('rm -rf {} \n mv {} ./Checkpoints/trash'.format(args.save, args.save))
         os._exit(0)
     except Exception:
         print(traceback.print_exc())
         if os.path.exists(args.save) and len(os.listdir(args.save)) < 3:
-            print('remove ‘{}’: Directory'.format(args.save))
-            os.system('rm -r {}'.format(args.save))
-            if os.path.exists(args.save):
-                shutil.rmtree(args.save)
+            print('remove {}: Directory'.format(args.save))
+            os.system('rm -rf {} \n mv {} ./Checkpoints/trash'.format(args.save, args.save))
         os._exit(0)
     finally:
         torch.cuda.empty_cache()

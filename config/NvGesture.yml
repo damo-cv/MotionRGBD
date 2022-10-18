@@ -37,7 +37,6 @@ common:
 model:
   Network: I3DWTrans # e.g., I3DWTrans or FusionNet
   pretrained: '/mnt/workspace/Code/CVPR/Checkpoints/I3DWTrans-NvGesture-K-20221017-113943/model_best.pth.tar' #'/mnt/workspace/Code/CVPR/Checkpoints/model_best-Nv-K.pth.tar'
-  # resume: '' #'/mnt/workspace/Code/CVPR/Checkpoints/FusionNet-NvGesture-M-20211211-131422/model_best.pth.tar'
   resumelr: False
   sample_duration: 64
   sample_size: 224

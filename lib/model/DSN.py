@@ -42,7 +42,8 @@ class DSNNet(nn.Module):
     )
 
     def __init__(self, args, num_classes=400, spatial_squeeze=True, name='inception_i3d', in_channels=3, dropout_keep_prob=0.5,
-                 pretrained: str = False):
+                 pretrained: str = False,
+                dropout_spatial: float = 0.0):
 
         super(DSNNet, self).__init__()
         self._num_classes = num_classes
@@ -110,7 +111,7 @@ class DSNNet(nn.Module):
         self.LinearMap = nn.Sequential(
             nn.LayerNorm(1024),
             nn.Linear(1024, 512),
-            
+            # nn.Dropout(dropout_spatial)
         )
 
         self.avg_pool = nn.AdaptiveAvgPool3d((None, 1, 1))
@@ -154,4 +155,6 @@ class DSNNet(nn.Module):
         x = self.LinearMap(x)
         cnn_vison = self.rrange(f.sum(dim=1, keepdim=True))
         logits, distillation_loss, (att_map, cosin_similar, MHAS, visweight) = self.dtn(x)
+        # return logits, distillation_loss, (cnn_vison[0].detach(), att_map, inp[0, :],
+        #                                  cosin_similar, MHAS, (feat, logits[0]))
         return logits, distillation_loss, (cnn_vison[0], att_map, cosin_similar, visweight, MHAS, (feat, inp[0, :]))

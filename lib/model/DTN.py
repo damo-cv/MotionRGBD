@@ -6,6 +6,8 @@ import torch
 from torch.autograd import Variable
 from torch import nn, einsum
 import torch.nn.functional as F
+from torch.nn import init
+
 from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
 import numpy as np
