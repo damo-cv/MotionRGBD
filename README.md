@@ -1,7 +1,10 @@
-# [CVPR2022] Decoupling and Recoupling Spatiotemporal Representation for RGB-D-based Motion Recognition, [arxiv](https://arxiv.org/abs/2112.09129)
+# [CVPR2022](https://openaccess.thecvf.com/content/CVPR2022/html/Zhou_Decoupling_and_Recoupling_Spatiotemporal_Representation_for_RGB-D-Based_Motion_Recognition_CVPR_2022_paper.html) Decoupling and Recoupling Spatiotemporal Representation for RGB-D-based Motion Recognition
 
-This is a PyTorch implementation of our paper. 
+## Update
+18/10/2022 Update the code of NvGesture training.
+
 ## 1. Requirements
+This is a PyTorch implementation of our paper. 
 
 torch>=1.7.0; torchvision>=0.8.0; Visdom(optional)
 
