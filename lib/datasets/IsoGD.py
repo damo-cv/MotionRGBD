@@ -8,7 +8,6 @@ from torchvision import transforms, set_image_backend
 import random, os
 from PIL import Image
 import numpy as np
-set_image_backend('accimage')
 
 class IsoGDData(Datasets):
     def __init__(self, args, ground_truth, modality, phase='train'):
