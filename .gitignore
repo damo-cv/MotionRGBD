@@ -1,0 +1,11 @@
+*.swp
+**/__pycache__/**
+.dumbo.json
+Checkpoints/
+out/
+demo/
+*.tar
+core*
+bk/
+*.ipynb
+*.ipynb*
