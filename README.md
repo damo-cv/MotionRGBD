@@ -1,7 +1,7 @@
 # [CVPR2022](https://openaccess.thecvf.com/content/CVPR2022/html/Zhou_Decoupling_and_Recoupling_Spatiotemporal_Representation_for_RGB-D-Based_Motion_Recognition_CVPR_2022_paper.html) Decoupling and Recoupling Spatiotemporal Representation for RGB-D-based Motion Recognition
 
 ## Update
-27/10/2022 (i) Update the code of NTU data preprocessing. (ii) Fixed a bug in the DTN. 
+27/10/2022 (i) Update the code of NTU data preprocessing. (ii) Fixed a bug in the DTN. \
 18/10/2022 Update the code of NvGesture training.
 
 ## 1. Requirements
