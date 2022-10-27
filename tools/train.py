@@ -134,7 +134,7 @@ def main(local_rank, nprocs, args):
 
     if args.SYNC_BN and args.nprocs > 1:
         model = nn.SyncBatchNorm.convert_sync_batchnorm(model)
-    model = nn.parallel.DistributedDataParallel(model, device_ids=[local_rank], find_unused_parameters=True)
+    model = nn.parallel.DistributedDataParallel(model, device_ids=[local_rank], find_unused_parameters=False)
     if local_rank == 0:
         logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
         # logging.info('FLOPs: {}'.format(flops_benchmark.count_flops(model)))

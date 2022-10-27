@@ -1,0 +1,65 @@
+common:
+  data: /media/ssd1/bjzhou/ssd2/bjzhou/Jester/20bn-jester-v1
+  splits: /media/ssd1/bjzhou/ssd2/bjzhou/Jester/dataset_splits
+
+  #-------basic Hyparameter----------
+  visname: Jester
+  dataset: Jester
+  batch_size: 2
+  test_batch_size: 2
+  num_workers: 4
+  learning_rate: 0.01
+  learning_rate_min: 0.00001
+  momentum: 0.9
+  weight_decay: 0.0003
+  init_epochs: 0
+  epochs: 100
+  report_freq: 10
+  metric_freq: 10
+  show_cluster_result: 100
+  optim: SGD
+  dist: True
+  vis_feature: True # Visualization?
+
+  scheduler:
+    name: cosin
+    patience: 4
+    warm_up_epochs: 0
+  loss:
+    name: CE
+    labelsmooth: True
+  mse_weight: 10.0
+  MultiLoss: True
+  loss_lamdb: [ 1, 0.5, 0.5, 0.5 ]
+  distill_lamdb: 1.
+
+model:
+  Network: I3DWTrans
+  pretrained: ''
+  # resume: ''
+  resumelr: False
+  sample_duration: 64
+  sample_size: 224
+  grad_clip: 5.
+  SYNC_BN: 1
+  w: 10
+  temper: 0.4
+  recoupling: True
+  knn_attention: 0.8
+  sharpness: True
+  temp: [ 0.04, 0.07 ]
+  frp: True
+  SEHeads: 1
+  N: 6
+
+dataset:
+  type: M
+  flip: 0.0
+  rotated: 0.5
+  angle: (-10, 10)
+  Blur: False
+  resize: (256, 256)
+  crop_size: 224
+  low_frames: 16
+  media_frames: 32
+  high_frames: 48

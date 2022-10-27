@@ -102,10 +102,14 @@ def load_pretrained_checkpoint(model, model_path):
 
     for k, v in params.items():
         name = k[7:] if k[:7] == 'module.' else k
-        if name not in ['dtn.mlp_head_small.1.bias', "dtn.mlp_head_small.1.weight",
+        try:
+            if v.shape == model.state_dict()[name].shape:
+              if name not in ['dtn.mlp_head_small.1.bias', "dtn.mlp_head_small.1.weight",
                         'dtn.mlp_head_media.1.bias', "dtn.mlp_head_media.1.weight",
                         'dtn.mlp_head_large.1.bias', "dtn.mlp_head_large.1.weight"]:
-            new_state_dict[name] = v
+                  new_state_dict[name] = v
+        except:
+            continue
     ret = model.load_state_dict(new_state_dict, strict=False)
     print('Missing keys: \n', ret.missing_keys)
     return model
@@ -127,8 +131,12 @@ def create_exp_dir(path, scripts_to_save=None):
   if scripts_to_save is not None:
     os.mkdir(os.path.join(path, 'scripts'))
     for script in scripts_to_save:
-      dst_file = os.path.join(path, 'scripts', os.path.basename(script))
-      shutil.copyfile(script, dst_file)
+      if os.path.isdir(script) and script != '__pycache__':
+        dst_file = os.path.join(path, 'scripts', script)
+        shutil.copytree(script, dst_file)
+      else:
+        dst_file = os.path.join(path, 'scripts', os.path.basename(script))
+        shutil.copyfile(script, dst_file)
 
 def cosine_scheduler(base_value, final_value, epochs, niter_per_ep, warmup_epochs=0, start_warmup_value=0):
     warmup_schedule = np.array([])

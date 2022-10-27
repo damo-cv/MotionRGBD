@@ -42,7 +42,7 @@ class MultiScaleTransformerEncoder(nn.Module):
     def __init__(self, args, small_dim=1024, small_depth=4, small_heads=8, small_dim_head=64, hidden_dim_small=768,
                  media_dim=1024, media_depth=4, media_heads=8, media_dim_head=64, hidden_dim_media=768,
                  large_dim=1024, large_depth=4, large_heads=8, large_dim_head=64, hidden_dim_large=768,
-                 dropout=0.):
+                 dropout=0., Local_flag=True):
         super().__init__()
 
         self.transformer_enc_small = Transformer(small_dim, small_depth, small_heads, small_dim_head,
@@ -51,11 +51,11 @@ class MultiScaleTransformerEncoder(nn.Module):
                                                  mlp_dim=hidden_dim_media, dropout=dropout, knn_attention=args.knn_attention)
         self.transformer_enc_large = Transformer(large_dim, large_depth, large_heads, large_dim_head,
                                                  mlp_dim=hidden_dim_large, dropout=dropout, knn_attention=args.knn_attention)
-
-        self.Mixed_small = TemporalInceptionModule(512, [160,112,224,24,64,64], 'Mixed_small')
-        self.Mixed_media = TemporalInceptionModule(512, [160,112,224,24,64,64], 'Mixed_media')
-        self.Mixed_large = TemporalInceptionModule(512, [160, 112, 224, 24, 64, 64], 'Mixed_large')
-        self.MaxPool = MaxPool3dSamePadding(kernel_size=[3, 1, 1], stride=(1, 1, 1), padding=0)
+        if Local_flag:
+            self.Mixed_small = TemporalInceptionModule(512, [160,112,224,24,64,64], 'Mixed_small')
+            self.Mixed_media = TemporalInceptionModule(512, [160,112,224,24,64,64], 'Mixed_media')
+            self.Mixed_large = TemporalInceptionModule(512, [160, 112, 224, 24, 64, 64], 'Mixed_large')
+            self.MaxPool = MaxPool3dSamePadding(kernel_size=[3, 1, 1], stride=(1, 1, 1), padding=0)
 
     def forward(self, xs, xm, xl, Local_flag=False):
         # Local Modeling
@@ -193,6 +193,7 @@ class DTNNet(nn.Module):
         self.dropout_large = nn.Dropout(emb_dropout)
 
         self.multi_scale_transformers = nn.ModuleList([])
+        Local_flag = True
         for _ in range(multi_scale_enc_depth):
             self.multi_scale_transformers.append(
                 MultiScaleTransformerEncoder(args, small_dim=small_dim, small_depth=small_depth,
@@ -203,7 +204,9 @@ class DTNNet(nn.Module):
 
                                              large_dim=large_dim, large_depth=large_depth,
                                              large_heads=heads,
-                                             dropout=dropout))
+                                             dropout=dropout,
+                                             Local_flag=Local_flag))
+            Local_flag = False
         self.pool = pool
         # self.to_latent = nn.Identity()
         self.avg_pool = nn.AdaptiveAvgPool1d(1)
