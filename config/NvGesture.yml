@@ -36,7 +36,7 @@ common:
   distill: 1.
 model:
   Network: I3DWTrans # e.g., I3DWTrans or FusionNet
-  pretrained: /mnt/workspace/Code/CVPR/Checkpoints/model_best-Nv-K.pth.tar
+  pretrained: /mnt/workspace/Code/CVPR/Checkpoints/I3DWTrans-NvGesture-K-20221017-113943/model_best-Nv-K.pth.tar-v1
   resumelr: False
   sample_duration: 64
   sample_size: 224

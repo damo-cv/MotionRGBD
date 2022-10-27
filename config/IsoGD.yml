@@ -37,7 +37,7 @@ common:
 model:
   Network: I3DWTrans # e.g., I3DWTrans or FusionNet
   pretrained: ''
-  resume: ''
+  # resume: ''
   resumelr: 0.0001
   sample_duration: 64
   sample_size: 224

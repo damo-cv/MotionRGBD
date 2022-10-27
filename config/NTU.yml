@@ -3,8 +3,8 @@
 # '''
 
 common:
-  data: /path/to/NTU-RGBD/dataset/
-  splits: /path/to/NTU-RGBD/dataset/dataset_splits/@CS
+  data: /mnt/workspace//Dataset/NTU-RGBD/
+  splits: /mnt/workspace//Dataset/NTU-RGBD/dataset_splits/@CS
 
   #-------basic Hyparameter----------
   visdom:
@@ -12,15 +12,15 @@ common:
     visname: NTU
   dataset: NTU #Database name e.g., NTU, THU ...
   batch_size: 4
-  test_batch_size: 4
-  num_workers: 6
+  test_batch_size: 6
+  num_workers: 10
   learning_rate: 0.005
   learning_rate_min: 0.00001
   momentum: 0.9
   weight_decay: 0.0003
   init_epochs: 0
   epochs: 100
-  report_freq: 100
+  report_freq: 10
   optim: SGD
   dist: True
   vis_feature: True # Visualization?
@@ -38,8 +38,8 @@ common:
 
 model:
   Network: I3DWTrans # e.g., I3DWTrans or FusionNet
-  pretrained: ''
-  resume: '' 
+  pretrained: '' #./Checkpoints/I3DWTrans-EXP-20211204-211826//model_best.pth.tar' #'../MultiScale/Checkpoints/I3DWTrans-EXP-20211024-171224/model_best.pth.tar' #'../MultiScale/Checkpoints/I3DWTrans-EXP-20211019-124405/model_best.pth.tar'
+  # resume: '' #'./Checkpoints/I3DWTrans-NTU-M-20211214-195641/model_best-DTN.pth.tar'
   resumelr: ''
   sample_duration: 64
   sample_size: 224
@@ -56,8 +56,8 @@ model:
   N: 6 # Number of Transformer Blocks
 
   #-------Used for fusion network----------
-  rgb_checkpoint: ''
-  depth_checkpoint: ''
+  rgb_checkpoint: './Checkpoints/I3DWTrans-EXP-20211204-211826//model_best.pth.tar'
+  depth_checkpoint: './Checkpoints/I3DWTrans-EXP-20211204-214434//model_best.pth.tar'
 
 dataset:
   type: M # M: rgb, K: depth
@@ -70,3 +70,7 @@ dataset:
   low_frames: 16
   media_frames: 32
   high_frames: 48
+
+# I3DWTrans-EXP-20211204-211826 M 90.25
+# I3DWTrans-EXP-20211204-214434 K 92.81
+  
