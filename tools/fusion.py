@@ -36,6 +36,7 @@ parser.add_argument('--save_grid_image', action='store_true', help='Save samples
 parser.add_argument('--save_output', action='store_true', help='Save logits?')
 parser.add_argument('--fp16', action='store_true', help='Training with fp16')
 parser.add_argument('--demo_dir', type=str, default='./demo', help='The dir for save all the demo')
+parser.add_argument('--resume', type=str, default='', help='resume model path.')
 
 parser.add_argument('--drop_path_prob', type=float, default=0.5, help='drop path probability')
 parser.add_argument('--save', type=str, default='Checkpoints/', help='experiment name')
@@ -51,8 +52,8 @@ try:
     if args.resume:
         args.save = os.path.split(args.resume)[0]
     else:
-        args.save = '{}/{}-EXP-{}'.format(args.save, args.Network, time.strftime("%Y%m%d-%H%M%S"))
-    utils.create_exp_dir(args.save, scripts_to_save=[args.config] + glob.glob('./tools/train*.py')+glob.glob('./lib/model/*.py'))
+        args.save = '{}/{}-{}-{}-{}'.format(args.save, args.Network, args.dataset, args.type, time.strftime("%Y%m%d-%H%M%S"))
+    utils.create_exp_dir(args.save, scripts_to_save=[args.config] + glob.glob('./tools/*.py') + glob.glob('./lib/*'))
 except:
     pass
 log_format = '%(asctime)s %(message)s'
@@ -112,10 +113,12 @@ def main(local_rank, nprocs, args):
         if args.resumelr:
             for g in optimizer.param_groups: g['lr'] = args.resumelr
             args.resume_scheduler = cosine_scheduler(args.resumelr, 1e-5, args.epochs - strat_epoch, len(train_queue))
+        args.resume_epoch = strat_epoch - 1
 
     else:
         strat_epoch = 0
         best_acc = 0.0
+        args.resume_epoch = 0
     scheduler[0].last_epoch = strat_epoch
 
 
@@ -382,13 +385,13 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         torch.cuda.empty_cache()
         if os.path.exists(args.save) and len(os.listdir(args.save)) < 3:
-            print('remove ‘{}’: Directory'.format(args.save))
+            print(f'remove {args.save}: Directory')
             os.system('rm -rf {} \n mv {} ./Checkpoints/trash'.format(args.save, args.save))
         os._exit(0)
     except Exception:
         print(traceback.print_exc())
         if os.path.exists(args.save) and len(os.listdir(args.save)) < 3:
-            print('remove ‘{}’: Directory'.format(args.save))
+            print(f'remove {args.save}: Directory')
             os.system('rm -rf {} \n mv {} ./Checkpoints/trash'.format(args.save, args.save))
         os._exit(0)
     finally:

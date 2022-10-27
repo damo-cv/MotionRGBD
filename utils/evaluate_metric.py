@@ -23,6 +23,81 @@ from torchvision import transforms
 from PIL import Image
 import torch
 from torchvision.utils import save_image, make_grid
+# ---------------------------------------
+# Plot accuracy and loss
+# ---------------------------------------
+def get_error_bar(best_score, valid_examples):
+    print("--------------------------------------------")
+    print("Standard Error") # best_score: Average al of scores, valid_examples: num of all samples
+    print("--------------------------------------------")
+
+    err = np.sqrt((best_score * (1 - best_score)) / valid_examples)
+    err_rounded_68 = round(err, 2)
+    err_rounded_95 = round((err_rounded_68 * 2), 2)
+
+    print('Error (68% CI): +- ' + str(err_rounded_68))
+    print('Error (95% CI): +- ' + str(err_rounded_95))
+    print()
+    return err_rounded_68
+
+def plot_train_results(PREDICTIONS_PATH, train_results, idx):
+    '''
+
+    :param PREDICTIONS_PATH: plot image save path
+    :param train_results: {'valid_score':[...], 'valid_loss':[...], 'train_score': [...], 'train_loss':[...]}
+    :param best_score: validation best acc
+    :param idx: epoch index
+    :return: None
+    '''
+
+    # best_score = sum(train_results['valid_score']) / len(train_results['valid_score'])
+    valid_examples = len(train_results['valid_score'])
+    super_category = str(idx)
+
+    best_score = train_results["best_score"]
+    standard_error = get_error_bar(best_score, valid_examples)
+    y_upper = train_results["valid_score"] + standard_error
+    y_lower = train_results["valid_score"] - standard_error
+
+    print("--------------------------------------------")
+    print("Results")
+    print("--------------------------------------------")
+
+    fig = plt.figure(figsize=(15, 5))
+
+    plt.subplot(1, 2, 1)
+    plt.plot(range(0, len(train_results["train_score"])), train_results["train_score"], label='train')
+
+    plt.plot(range(0, len(train_results["valid_score"])), train_results["valid_score"], label='valid')
+
+    kwargs = {'color': 'black', 'linewidth': 1, 'linestyle': '--', 'dashes': (5, 5)}
+    plt.plot(range(0, len(train_results["valid_score"])), y_lower, **kwargs)
+    plt.plot(range(0, len(train_results["valid_score"])), y_upper, **kwargs, label='validation SE (68% CI)')
+
+    plt.title('Accuracy Plot - ' + super_category, fontsize=20)
+    plt.ylabel('Accuracy', fontsize=16)
+    plt.xlabel('Training Epochs', fontsize=16)
+    plt.ylim(0, 1)
+    plt.legend()
+
+    plt.subplot(1, 2, 2)
+    plt.plot(range(0, len(train_results["train_loss"])), train_results["train_loss"], label='train')
+    plt.plot(range(0, len(train_results["valid_loss"])), train_results["valid_loss"], label='valid')
+
+    plt.title('Loss Plot - ' + super_category, fontsize=20)
+    plt.ylabel('Loss', fontsize=16)
+    plt.xlabel('Training Epochs', fontsize=16)
+    max_train_loss = max(train_results["train_loss"])
+    max_valid_loss = max(train_results["valid_loss"])
+    y_max_t_v = max_valid_loss if max_valid_loss > max_train_loss else max_train_loss
+    ylim_loss = y_max_t_v if y_max_t_v > 1 else 1
+    plt.ylim(0, ylim_loss)
+    plt.legend()
+
+    plt.show()
+
+    fig.savefig(os.path.join(PREDICTIONS_PATH, "train_results_{}.png".format(idx)), dpi=fig.dpi)
+
 
 # ---------------------------------------
 # Plot Confusion Matrix
@@ -117,6 +192,74 @@ def plot_confusion_matrix(PREDICTIONS_PATH, grounds, preds, categories, idx, top
     print('=' * 80)
 
     return TopK_low_idx
+
+
+# Fast Rank Pooling
+sample_size = 128
+def GenerateRPImage(imgs_path, sl):
+    def get_DDI(video_arr):
+        def get_w(N):
+            return [float(i) * 2 - N - 1 for i in range(1, N + 1)]
+
+        w_arr = get_w(len(video_arr))
+        re = np.zeros((sample_size, sample_size, 3))
+        for a, b in zip(video_arr, w_arr):
+            img = cv2.imread(os.path.join(imgs_path, "%06d.jpg" % a))
+            img = cv2.resize(img, (sample_size, sample_size))
+            re += img * b
+        re -= np.min(re)
+        re = 255.0 * re / np.max(re) if np.max(re) != 0 else 255.0 * re / (np.max(re) + 0.00001)
+
+        return re.astype('uint8')
+
+    return get_DDI(sl)
+
+# ---------------------------------------
+# Wrongly Classified Images
+# ---------------------------------------
+def plot_wrongly_classified_images(PREDICTIONS_PATH, TopK_low_idx, valid_images, idx):
+    print("--------------------------------------------")
+    print("Wrongly Classified Images")
+    print("--------------------------------------------")
+
+    v_paths, grounds, preds = valid_images
+    f = lambda n, sn: [(lambda n, arr: n if arr == [] else int(np.mean(arr)))(n * i / sn, range(int(n * i / sn),
+                                                                                            max(int(
+                                                                                                n * i / sn) + 1,
+                                                                                                int(n * (
+                                                                                                        i + 1) / sn))))
+                   for i in range(sn)]
+
+    train_images = []
+    ground, pred, pred_lbl_file = [], [], []
+    for g, p, v in zip(grounds, preds, v_paths):
+        assert p != g, 'Pred: {} equ to ground-truth: {}'.format(p, g)
+        if g in TopK_low_idx[:10]:
+            imgs = [transforms.ToTensor()(Image.open(os.path.join(v, "%06d.jpg" % a)).resize((200, 200))).unsqueeze(0) for a in f(len(os.listdir(v))//2, 10)]
+            train_images.append(make_grid(torch.cat(imgs), nrow=10, padding=2).permute(1, 2, 0))
+            ground.append(g)
+            pred.append(p)
+            pred_lbl_file.append(v)
+        if len(train_images) > 9:
+            break
+
+    fig = plt.figure(figsize=(30, 20))
+    k = 0
+    for i in range(0, len(train_images)):
+        fig.add_subplot(10, 1, k + 1)
+        plt.axis('off')
+        if i == 0:
+            title = "Orig lbl: " + str(ground[i]) + " Pred lbl: " + str(pred[i]) + "  " + pred_lbl_file[i]
+        else:
+            title = '\n'*10 + "Orig lbl: " + str(ground[i]) + " Pred lbl: " + str(pred[i]) + "  " + pred_lbl_file[i]
+        plt.title(title)
+        plt.imshow(train_images[i])
+        k += 1
+
+    plt.pause(0.1)
+    print()
+    fig.savefig(os.path.join(PREDICTIONS_PATH, "wrongly_classified_images.png".format(idx)), dpi=fig.dpi)
+    plt.close()
 
 def EvaluateMetric(PREDICTIONS_PATH, train_results, idx):
     TopK_low_idx = plot_confusion_matrix(PREDICTIONS_PATH, train_results['grounds'], train_results['preds'], train_results['categories'], idx)
