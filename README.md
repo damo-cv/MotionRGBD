@@ -1,9 +1,23 @@
 # [CVPR2022](https://openaccess.thecvf.com/content/CVPR2022/html/Zhou_Decoupling_and_Recoupling_Spatiotemporal_Representation_for_RGB-D-Based_Motion_Recognition_CVPR_2022_paper.html) Decoupling and Recoupling Spatiotemporal Representation for RGB-D-based Motion Recognition
 
-## Update
-27/10/2022 (i) Update the code of NTU data preprocessing. (ii) Fixed a bug in the DTN. 
+This repo is the official implementation of "Decoupling and Recoupling Spatiotemporal Representation for RGB-D-based Motion Recognition" as well as the follow-ups. It currently includes code and models for the following tasks:
+> **RGB-D-based Action Recognition**: Included in this repo.
 
-18/10/2022 Update the code of NvGesture training.
+> **RGB-D-based Gesture Recognition**: Included in this repo.
+
+>**Dynamic motion attention capture based on native video frames**: Included in this repo. See FRP module in this paper.
+
+## Updates
+***27/07/2023***
+ 1. Updated the link of the journal expansion version [UMDR-Net](https://github.com/zhoubenjia/MotionRGBD-PAMI) of this conference paper.
+ 2. Updated the link of its improved version [MFST](coming soon).
+
+***27/10/2022***
+ 1. Update the code of NTU data preprocessing. 
+ 2. Fixed a bug in the DTN. 
+
+***18/10/2022***
+ 1. Update the code of NvGesture training.
 
 ## 1. Requirements
 This is a PyTorch implementation of our paper. 
