@@ -9,8 +9,8 @@ This repo is the official implementation of "Decoupling and Recoupling Spatiotem
 
 ## Updates
 ***27/07/2023***
- 1. Updated the link of the journal expansion version [UMDR-Net](https://github.com/zhoubenjia/MotionRGBD-PAMI) of this conference paper.
- 2. Updated the link of its improved version [MFST](https://arxiv.org/pdf/2308.12006.pdf).
+ 1. Updated the link of the journal expansion version [UMDR-Net](https://github.com/zhoubenjia/MotionRGBD-PAMI)(TPAMI'23) of this conference paper.
+ 2. Updated the link of its improved version [MFST](https://arxiv.org/pdf/2308.12006.pdf)(MM'23).
 
 ***27/10/2022***
  1. Update the code of NTU data preprocessing. 
