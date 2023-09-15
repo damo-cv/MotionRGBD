@@ -1,5 +1,7 @@
 # [CVPR2022](https://openaccess.thecvf.com/content/CVPR2022/html/Zhou_Decoupling_and_Recoupling_Spatiotemporal_Representation_for_RGB-D-Based_Motion_Recognition_CVPR_2022_paper.html) Decoupling and Recoupling Spatiotemporal Representation for RGB-D-based Motion Recognition
 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/decoupling-and-recoupling-spatiotemporal/hand-gesture-recognition-on-nvgesture-1)](https://paperswithcode.com/sota/hand-gesture-recognition-on-nvgesture-1?p=decoupling-and-recoupling-spatiotemporal)
+
 This repo is the official implementation of "Decoupling and Recoupling Spatiotemporal Representation for RGB-D-based Motion Recognition" as well as the follow-ups. It currently includes code and models for the following tasks:
 > **RGB-D-based Action Recognition**: Included in this repo.
 
